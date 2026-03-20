@@ -489,6 +489,7 @@ footer { background: var(--text-dark); color: rgba(255,255,255,0.6); padding: 60
 .team-card {
   background: var(--white); border-radius: 18px; overflow: hidden;
   border: 1px solid var(--border); transition: all var(--transition); text-align: center;
+  height: auto;
 }
 .team-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
 .team-photo {
