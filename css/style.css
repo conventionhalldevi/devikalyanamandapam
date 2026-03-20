@@ -555,7 +555,23 @@ footer { background: var(--text-dark); color: rgba(255,255,255,0.6); padding: 60
 .faq-item.open .faq-a { max-height: 300px; }
 .faq-a p { padding: 0 22px 18px; font-size: 0.88rem; color: var(--text-mid); line-height: 1.8; }
 
-/* ═══════════════════════════════════════
+/* Pricing options grid */
+.pricing-options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+@media (max-width: 640px) {
+  .pricing-options-grid {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+    gap: 18px;
+  }
+}
+══════════════════════════════════════
    GALLERY PAGE
 ═══════════════════════════════════════ */
 .gallery-full-grid {
