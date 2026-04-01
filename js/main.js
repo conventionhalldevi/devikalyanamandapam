@@ -4,6 +4,30 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+  /* ── TRUE LAZY LOADING (IntersectionObserver) ──
+     Intercepts all img[loading="lazy"], swaps src → data-src immediately
+     so the browser never fetches them until they near the viewport.        */
+  const BLANK = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+  const lazyImgs = document.querySelectorAll('img[loading="lazy"]');
+
+  lazyImgs.forEach(img => {
+    if (img.src && !img.src.startsWith('data:')) {
+      img.dataset.src = img.src;
+      img.src = BLANK;
+    }
+  });
+
+  const imgObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const img = entry.target;
+      if (img.dataset.src) img.src = img.dataset.src;
+      imgObs.unobserve(img);
+    });
+  }, { rootMargin: '200px 0px' });
+
+  lazyImgs.forEach(img => imgObs.observe(img));
+
   /* ── NAV SCROLL SHADOW ── */
   const navbar = document.getElementById('navbar');
   if (navbar) {
@@ -100,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function openLightbox(idx) {
       currentIdx = idx;
-      lbImg.src = imgArr[idx].src;
+      lbImg.src = imgArr[idx].dataset.src || imgArr[idx].src;
       lbImg.alt = imgArr[idx].alt;
       lightbox.classList.add('open');
       document.body.style.overflow = 'hidden';
@@ -121,14 +145,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (lbPrev) {
       lbPrev.addEventListener('click', () => {
         currentIdx = (currentIdx - 1 + imgArr.length) % imgArr.length;
-        lbImg.src = imgArr[currentIdx].src;
+        lbImg.src = imgArr[currentIdx].dataset.src || imgArr[currentIdx].src;
         lbImg.alt = imgArr[currentIdx].alt;
       });
     }
     if (lbNext) {
       lbNext.addEventListener('click', () => {
         currentIdx = (currentIdx + 1) % imgArr.length;
-        lbImg.src = imgArr[currentIdx].src;
+        lbImg.src = imgArr[currentIdx].dataset.src || imgArr[currentIdx].src;
         lbImg.alt = imgArr[currentIdx].alt;
       });
     }
